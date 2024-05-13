@@ -1,4 +1,4 @@
-package com.ShortLinker.Controller;
+package com.ShortLinker.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
