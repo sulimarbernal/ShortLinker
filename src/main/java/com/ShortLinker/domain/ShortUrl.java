@@ -1,5 +1,6 @@
 package com.ShortLinker.domain;
 
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,6 +11,7 @@ import lombok.Builder;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Document
 public class ShortUrl {
     @Id
