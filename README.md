@@ -92,7 +92,7 @@ curl http://localhost:8080/actuator/prometheus
 
 ![img.png](img.png)
 ![img_1.png](img_1.png)
-note = cache no implement
+note = cache not implemented
 
 
 
