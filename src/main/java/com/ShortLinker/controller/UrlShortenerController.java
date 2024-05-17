@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 
 @RestController
+@RequestMapping("${app.short-url-path}")
 public class UrlShortenerController {
 
     private final UrlShortenerService service;
@@ -24,25 +25,25 @@ public class UrlShortenerController {
         this.service = service;
     }
 
-    @PostMapping("/createShortUrl")
+    @PostMapping("/")
     @Metric("createShortUrl")
     public ResponseEntity<UrlResponseDTO> createShortUrl(@Valid @RequestBody UrlRequestDTO request) {
         UrlResponseDTO response = service.createShortUrl(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/short/{shortUrl}")
-    @Metric("redirectToLongUrl")
-    public ResponseEntity<Void> getShortUrl(@PathVariable String shortUrl) {
-        ShortUrl result = service.getShortUrl(shortUrl);
+    @GetMapping("/{code}")
+    @Metric("redirectShortUrl")
+    public ResponseEntity<Void> redirectShortUrl(@PathVariable String code) {
+        ShortUrl result = service.getShortUrl(code);
         if (result != null && result.getStatus()) {
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(result.getLongUrl())).build();
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/updateUrlProperties/{id}")
-    @Metric("updateUrlProperties")
+    @PutMapping("/{id}")
+    @Metric("updateShortUrl")
     public ResponseEntity<ShortUrl> updateShortUrl(@PathVariable String id, @Valid @RequestBody ShortUrlUpdateDTO updateDTO) {
         try {
             ValidateShortUrlUpdate.validate(updateDTO);

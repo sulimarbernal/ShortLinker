@@ -18,14 +18,16 @@ public class UrlShortenerService {
     @Value("${app.base-url}")
     private String baseUrl;
 
+    @Value("${app.short-url-path}")
+    private String shortUrlPath;
+
     public UrlShortenerService(ShortUrlRepository repository) {
         this.repository = repository;
     }
 
-
     public UrlResponseDTO createShortUrl(UrlRequestDTO request) {
         String uniqueKey = UrlGenerator.generateUniqueKey();
-        ShortUrl shortUrl = new ShortUrl(request.getLongUrl(), baseUrl+"/short/" + uniqueKey);
+        ShortUrl shortUrl = new ShortUrl(request.getLongUrl(), UrlGenerator.buildCompleteUrl(baseUrl, shortUrlPath) + uniqueKey);
 
         repository.save(shortUrl);
         return UrlResponseDTO.builder()
@@ -36,7 +38,8 @@ public class UrlShortenerService {
     }
 
     public ShortUrl getShortUrl(String shortUrl) {
-        String shortUrlCompleted = baseUrl+"/short/"+shortUrl;
+        System.out.println("baseUrl: " + baseUrl);
+        String shortUrlCompleted = UrlGenerator.buildCompleteUrl(baseUrl, shortUrlPath) + shortUrl;
         return repository.findByShortUrl(shortUrlCompleted);
     }
 
@@ -44,9 +47,12 @@ public class UrlShortenerService {
         Optional<ShortUrl> shortUrlOptional = repository.findById(id);
         if (shortUrlOptional.isPresent()) {
             ShortUrl shortUrl = shortUrlOptional.get();
-
-            updateDTO.getLongUrl().ifPresent(shortUrl::setLongUrl);
-            updateDTO.getStatus().ifPresent(shortUrl::setStatus);
+            if (updateDTO.getLongUrl() != null) {
+                shortUrl.setLongUrl(updateDTO.getLongUrl());
+            }
+            if (updateDTO.getStatus() != null) {
+                shortUrl.setStatus(updateDTO.getStatus());
+            }
 
             return repository.save(shortUrl);
         } else {

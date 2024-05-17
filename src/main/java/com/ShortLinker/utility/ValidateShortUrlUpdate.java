@@ -13,11 +13,11 @@ public class ValidateShortUrlUpdate {
     static public void validate(ShortUrlUpdateDTO shortUrlUpdate) throws BadRequestException {
         ensureNonNullDto(shortUrlUpdate);
 
-        boolean isUrlEmpty = checkIsEmpty(shortUrlUpdate.getLongUrl());
-        boolean isStatusEmpty = checkIsEmptyBoolean(shortUrlUpdate.getStatus());
+        boolean isUrlEmpty = checkIsEmpty(Optional.ofNullable(shortUrlUpdate.getLongUrl()));
+        boolean isStatusEmpty = checkIsEmptyBoolean(Optional.ofNullable(shortUrlUpdate.getStatus()));
 
         validateFieldsPresence(isUrlEmpty, isStatusEmpty);
-        validateUrlIfPresent(shortUrlUpdate.getLongUrl(), isUrlEmpty);
+        validateUrlIfPresent(Optional.ofNullable(shortUrlUpdate.getLongUrl()), isUrlEmpty);
     }
 
     private void ensureNonNullDto(ShortUrlUpdateDTO dto) throws BadRequestException {

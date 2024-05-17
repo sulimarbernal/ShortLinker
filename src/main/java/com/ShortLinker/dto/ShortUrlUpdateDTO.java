@@ -12,7 +12,7 @@ import java.util.Optional;
 @Getter
 @AllArgsConstructor
 public class ShortUrlUpdateDTO {
-    private Optional<String> longUrl;
-    private Optional<Boolean> status;
+    private String longUrl;
+    private Boolean status;
 
 }
