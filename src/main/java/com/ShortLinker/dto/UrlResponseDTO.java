@@ -8,12 +8,14 @@ import lombok.Builder;
 @Builder
 @AllArgsConstructor
 public class UrlResponseDTO {
+    private String id;
     private String longUrl;
     private String shortUrl;
     private Boolean status;
 
     @Data
     public static class Origin {
+        private String id;
         private String longUrl;
         private String shortUrl;
         private Boolean status;
